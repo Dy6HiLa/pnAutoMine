@@ -1,6 +1,7 @@
 package ru.privatenull.pnautomine;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bstats.bukkit.Metrics;
 import ru.privatenull.pnautomine.commands.MineCommand;
 import ru.privatenull.pnautomine.commands.MineTabCompleter;
 import ru.privatenull.pnautomine.config.MessagesConfig;
@@ -25,6 +26,7 @@ public final class PnAutoMinePlugin extends JavaPlugin {
     private MineManager mineManager;
     private HologramService holograms;
     private UpdateChecker updateChecker;
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -36,6 +38,7 @@ public final class PnAutoMinePlugin extends JavaPlugin {
 
         mineManager = new MineManager(this);
         mineManager.loadMines();
+        metrics = new Metrics(this, 32828);
         updateChecker = createUpdateChecker();
         if (updateChecker != null) {
             updateChecker.start();
@@ -71,6 +74,7 @@ public final class PnAutoMinePlugin extends JavaPlugin {
             updateChecker.cancel();
             updateChecker = null;
         }
+        metrics = null;
 
         PluginBanner.disabled(this, SUPPORT_DISCORD);
     }
