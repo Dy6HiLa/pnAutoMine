@@ -1,0 +1,19 @@
+name: pnAutoMine
+version: "${version}"
+main: ru.privatenull.pnautomine.PnAutoMinePlugin
+api-version: "1.16"
+authors: [privatenull]
+description: pnAutoMine - automatic mine reset plugin with WorldEdit integration
+depend: [WorldEdit]
+softdepend: [FancyHolograms, DecentHolograms, PlaceholderAPI]
+commands:
+  pnautomine:
+    description: pnAutoMine main command
+    aliases: [mine, mines, am]
+    usage: /pnautomine help
+    permission: pnautomine.admin
+permissions:
+  pnautomine.admin:
+    default: op
+  pnautomine.use:
+    default: true

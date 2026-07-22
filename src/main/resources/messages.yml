@@ -1,0 +1,73 @@
+# ========================================
+#         pnAutoMine Messages
+# ========================================
+
+prefix: "&b&lpnAutoMine &8» &r"
+
+# General
+no-permission: "{prefix}&cУ вас нет прав для этого действия."
+player-only: "{prefix}&cЭта команда доступна только для игроков."
+unknown-command: "{prefix}&cНеизвестная команда. Используйте &f/mine help&c."
+
+# Help
+help-header: "&b&l━━━━━━━━ pnAutoMine Help ━━━━━━━━"
+help-create: "&e/mine create <id> <type> &8- &7Создать шахту"
+help-delete: "&e/mine delete <id> &8- &7Удалить шахту"
+help-reset: "&e/mine reset <id> &8- &7Сбросить шахту"
+help-resetall: "&e/mine resetall &8- &7Сбросить все шахты"
+help-list: "&e/mine list &8- &7Список шахт"
+help-info: "&e/mine info <id> &8- &7Информация о шахте"
+help-setspawn: "&e/mine setspawn <id> &8- &7Установить точку телепортации"
+help-sethologram: "&e/mine sethologram <id> &8- &7Установить голограмму"
+help-reload: "&e/mine reload &8- &7Перезагрузить конфигурацию"
+help-types: "&e/mine types &8- &7Список типов шахт"
+help-footer: "&b&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Create
+create-success: "{prefix}&aШахта &f{id} &aуспешно создана! Тип: {type}"
+create-already-exists: "{prefix}&cШахта с ID &f{id} &cуже существует."
+create-no-selection: "{prefix}&cВыделите регион через WorldEdit перед созданием шахты."
+create-invalid-type: "{prefix}&cНеизвестный тип шахты: &f{type}&c. Используйте &f/mine types&c."
+
+# Delete
+delete-success: "{prefix}&aШахта &f{id} &aуспешно удалена."
+delete-not-found: "{prefix}&cШахта &f{id} &cне найдена."
+
+# Reset
+reset-success: "{prefix}&aШахта &f{id} &aуспешно сброшена!"
+reset-not-found: "{prefix}&cШахта &f{id} &cне найдена."
+reset-broadcast: "{prefix}&eШахта &f{mine_name} &eбыла обновлена!"
+resetall-success: "{prefix}&aВсе шахты успешно сброшены!"
+
+# Setspawn
+setspawn-success: "{prefix}&aТочка телепортации для шахты &f{id} &aустановлена."
+setspawn-not-found: "{prefix}&cШахта &f{id} &cне найдена."
+
+# Sethologram
+sethologram-success: "{prefix}&aГолограмма для шахты &f{id} &aустановлена."
+sethologram-not-found: "{prefix}&cШахта &f{id} &cне найдена."
+
+# Info
+info-header: "&b&l━━━━━━ Шахта: {id} ━━━━━━"
+info-type: "&7Тип: {type}"
+info-world: "&7Мир: &f{world}"
+info-blocks: "&7Блоков: &f{remaining}&7/&f{total}"
+info-reset-interval: "&7Интервал сброса: &f{interval}с"
+info-next-reset: "&7Следующий сброс: &f{time}"
+info-spawn: "&7Спавн: &f{spawn}"
+info-footer: "&b&l━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# List
+list-header: "{prefix}&bСписок шахт:"
+list-entry: "&8- &e{id} &8(&7{type}&8) &7[&f{remaining}&7/&f{total}&7]"
+list-empty: "{prefix}&7Нет созданных шахт."
+
+# Types
+types-header: "{prefix}&bДоступные типы шахт:"
+types-entry: "&8- {display_name} &8(&7{id}&8)"
+
+# Reload
+reload-success: "{prefix}&aКонфигурация успешно перезагружена!"
+
+# Teleport
+teleport-on-reset: "{prefix}&eВы были телепортированы из шахты &f{mine_name}&e!"

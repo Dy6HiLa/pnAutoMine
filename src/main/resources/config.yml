@@ -1,0 +1,100 @@
+# ========================================
+#         Конфигурация pnAutoMine
+# ========================================
+
+# Провайдер голограмм: AUTO, FANCY, DECENT, NONE
+holograms:
+  provider: AUTO
+
+# Настройки шахты по умолчанию, можно переопределить для каждой шахты
+defaults:
+  # Интервал сброса в секундах
+  reset-interval: 300
+  # Процент для сброса: шахта сбрасывается, когда добыто столько блоков
+  reset-percentage: 100
+  # Отправлять сообщение о сбросе всем игрокам
+  broadcast-reset: true
+  # Звук при сбросе (оставьте пустым, чтобы отключить)
+  reset-sound: ENTITY_EXPERIENCE_ORB_PICKUP
+  # Телепортировать игроков из шахты перед сбросом
+  teleport-on-reset: true
+
+# Типы шахт задают состав блоков и отображаемые названия
+# У каждого типа есть уникальный ID, который используется в командах
+mine-types:
+  normal:
+    display-name: "&7Обычная шахта"
+    blocks:
+      STONE: 40
+      COBBLESTONE: 30
+      ANDESITE: 15
+      DIORITE: 10
+      GRANITE: 5
+
+  rare:
+    display-name: "&9Редкая шахта"
+    blocks:
+      STONE: 30
+      IRON_ORE: 25
+      COAL_ORE: 20
+      COPPER_ORE: 15
+      GOLD_ORE: 10
+
+  epic:
+    display-name: "&5Эпическая шахта"
+    blocks:
+      STONE: 20
+      IRON_ORE: 20
+      GOLD_ORE: 20
+      DIAMOND_ORE: 15
+      LAPIS_ORE: 15
+      REDSTONE_ORE: 10
+
+  legendary:
+    display-name: "&6Легендарная шахта"
+    blocks:
+      DIAMOND_ORE: 25
+      EMERALD_ORE: 20
+      GOLD_ORE: 20
+      ANCIENT_DEBRIS: 10
+      LAPIS_ORE: 15
+      REDSTONE_ORE: 10
+
+  mythic:
+    display-name: "&c&lМифическая шахта"
+    blocks:
+      DIAMOND_ORE: 30
+      EMERALD_ORE: 25
+      ANCIENT_DEBRIS: 20
+      GOLD_BLOCK: 10
+      DIAMOND_BLOCK: 10
+      NETHERITE_BLOCK: 5
+
+# Порядок автоматической смены типов идёт в том же порядке, что и выше.
+mine-type-progression:
+  enabled: true
+  loop: true
+
+# Настройки голограммы для отображения информации о шахте
+hologram:
+  enabled: true
+  # Строки, которые показываются над шахтой (поддерживаются PlaceholderAPI и внутренние плейсхолдеры)
+  # Плейсхолдеры:
+  #   {mine_name}          - Отображаемое имя шахты
+  #   {mine_id}            - ID шахты
+  #   {mine_type}          - Название типа (normal/rare/epic/legendary/mythic)
+  #   {mine_type_display}  - Отображаемое название типа с цветами
+  #   {blocks_remaining}   - Сколько блоков осталось
+  #   {blocks_total}       - Всего блоков в шахте
+  #   {blocks_percentage}  - Процент оставшихся блоков
+  #   {reset_time}         - Время до следующего сброса в формате строки
+  #   {reset_time_seconds} - Время до следующего сброса в секундах
+  lines:
+    - "&b&l{mine_name}"
+    - "&7Тип: {mine_type_display}"
+    - "&7Блоков: &f{blocks_remaining}&7/&f{blocks_total} &8(&a{blocks_percentage}%&8)"
+    - "&7Сброс через: &e{reset_time}"
+  offset:
+    x: 0.0
+    y: 2.0
+    z: 0.0
