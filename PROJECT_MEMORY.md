@@ -7,7 +7,7 @@
 - Поддерживаемые версии: Paper; компиляция против Paper API 1.21.11, исходная ошибка получена на Paper 1.21.4
 - Версия Java: байткод Java 17; проверочная сборка выполнена JDK 21.0.11
 - Основные зависимости: WorldEdit и pnLibrary; опционально FancyHolograms, DecentHolograms, PlaceholderAPI и TAB
-- Последний стабильный commit: не подтверждён; исходный HEAD задачи `f13e3996cd7934969f1dd346903eced6972e74d2` содержит ошибочную упаковку bStats
+- Последний стабильный commit: `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`
 - Последний опубликованный release: не подтверждён
 
 ## Постоянные архитектурные правила
@@ -57,7 +57,7 @@
 - **Неудачные подходы:** первая проверка сборки также выявила неверный путь `../pnLibrary`; после исправления пути обнаружилось, что исходный код использовал удалённые `UpdateChecker`, `UpdateSettings` и старый `lifecycle.PluginBanner`, поэтому код мигрирован на актуальный API вместо возврата устаревших классов.
 - **Правило на будущее:** после изменений зависимостей проверять не только успешную сборку, но и фактические package-path внутри production-JAR.
 - **Проверка:** `gradlew.bat clean build` успешен; JAR содержит 0 `org/bstats/**`, 0 `ru/privatenull/pnlibrary/**` и 13 классов vendored Bukkit metrics под `ru/privatenull/pnautomine/libs/pnlibrary/metrics/vendor/bukkit/**`. Запуск на полноценном Paper-сервере с WorldEdit в этой задаче не выполнялся.
-- **Commit или release:** не создан.
+- **Commit или release:** `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`; release не создан.
 
 ## Форматы и совместимость
 
@@ -76,7 +76,7 @@
 - **Причина:** плагин не включался из-за bStats relocation-check; владелец сервера запросил настраиваемый sidebar через TAB.
 - **Результат:** production-JAR успешно собирается, не содержит нерелоцированных bStats/pnLibrary и включает пример TAB.
 - **Проверено:** `gradlew.bat clean build` — `BUILD SUCCESSFUL` (Gradle 8.8, JDK 21.0.11, Windows 11); `git diff --check` без ошибок; структура JAR проверена через `System.IO.Compression`.
-- **Commit/release:** не создан.
+- **Commit/release:** `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`; release не создан.
 
 ## Незавершённая работа
 
