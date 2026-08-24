@@ -42,7 +42,6 @@ dependencies {
     compileOnly("de.oliver:FancyHolograms:2.10.0")
     compileOnly("com.github.decentsoftware-eu.decentholograms:plugin:2.10.1")
     compileOnly("me.clip:placeholderapi:2.11.6")
-    implementation("org.bstats:bstats-bukkit:3.0.3")
     implementation("ru.privatenull:pnLibrary:1.0.0")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
@@ -56,6 +55,7 @@ tasks {
     shadowJar {
         archiveClassifier.set('')
         mergeServiceFiles()
+        relocate('org.bstats', 'ru.privatenull.pnautomine.libs.bstats')
         relocate('ru.privatenull.pnlibrary', 'ru.privatenull.pnautomine.libs.pnlibrary')
     }
 

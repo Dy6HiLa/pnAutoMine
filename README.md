@@ -13,6 +13,7 @@
 - голограмма над шахтой с названием, типом, блоками и временем до сброса
 - команда просмотра списка и информации по шахтам
 - поддержка PlaceholderAPI
+- настраиваемый sidebar scoreboard через TAB и PlaceholderAPI
 - поддержка FancyHolograms и DecentHolograms
 
 ## Команды
@@ -51,6 +52,39 @@
 - FancyHolograms
 - DecentHolograms
 - PlaceholderAPI
+- TAB (для sidebar scoreboard)
+
+## PlaceholderAPI и scoreboard TAB
+
+pnAutoMine не заменяет scoreboard TAB: он предоставляет значения, а название,
+строки, цвета и условия показа владелец сервера настраивает в
+`plugins/TAB/config.yml`. После первого запуска пример создаётся в
+`plugins/pnAutoMine/tab-scoreboard-example.yml`.
+
+Placeholder текущей шахты определяется по позиции игрока:
+
+- `%pnautomine_current_exists%` — находится ли игрок в шахте (`true`/`false`)
+- `%pnautomine_current_id%` — ID текущей шахты
+- `%pnautomine_current_name%` — отображаемое имя
+- `%pnautomine_current_type%` — ID типа
+- `%pnautomine_current_type_display%` — отображаемое имя типа
+- `%pnautomine_current_blocks_total%` — всего блоков
+- `%pnautomine_current_blocks_remaining%` — осталось блоков
+- `%pnautomine_current_blocks_mined%` — добыто блоков
+- `%pnautomine_current_percentage%` — процент оставшихся блоков
+- `%pnautomine_current_percentage_mined%` — процент добытых блоков
+- `%pnautomine_current_reset_time%` — время до сброса
+- `%pnautomine_current_reset_seconds%` — время до сброса в секундах
+- `%pnautomine_current_reset_interval%` — интервал сброса в секундах
+- `%pnautomine_current_world%` — мир шахты
+- `%pnautomine_mine_count%` — число загруженных шахт
+
+Для конкретной шахты вместо `current` указывается её ID:
+`%pnautomine_<mine_id>_<value>%`, например
+`%pnautomine_spawn_blocks_remaining%`.
+
+Требуются установленные PlaceholderAPI и TAB. Проверить результат можно
+командой TAB: `/tab parse <игрок> %pnautomine_current_name%`.
 
 ## Настройка
 

@@ -5,7 +5,7 @@ api-version: "1.16"
 authors: [privatenull]
 description: pnAutoMine - automatic mine reset plugin with WorldEdit integration
 depend: [WorldEdit]
-softdepend: [FancyHolograms, DecentHolograms, PlaceholderAPI]
+softdepend: [FancyHolograms, DecentHolograms, PlaceholderAPI, TAB]
 commands:
   pnautomine:
     description: pnAutoMine main command
