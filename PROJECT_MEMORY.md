@@ -3,12 +3,12 @@
 ## Состояние проекта
 
 - Название: pnAutoMine
-- Текущая версия: 1.0.0
+- Текущая версия: 1.0.1
 - Поддерживаемые версии: Paper; компиляция против Paper API 1.21.11, исходная ошибка получена на Paper 1.21.4
 - Версия Java: байткод Java 17; проверочная сборка выполнена JDK 21.0.11
 - Основные зависимости: WorldEdit и pnLibrary; опционально FancyHolograms, DecentHolograms, PlaceholderAPI и TAB
-- Последний стабильный commit: `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`
-- Последний опубликованный release: не подтверждён
+- Последний стабильный commit: `eb4ce5d5a174ed5f155d94298ddd1b2119f367f1`
+- Последний опубликованный release: `v1.0.1` — https://github.com/Dy6HiLa/pnAutoMine/releases/tag/v1.0.1
 
 ## Постоянные архитектурные правила
 
@@ -57,7 +57,7 @@
 - **Неудачные подходы:** первая проверка сборки также выявила неверный путь `../pnLibrary`; после исправления пути обнаружилось, что исходный код использовал удалённые `UpdateChecker`, `UpdateSettings` и старый `lifecycle.PluginBanner`, поэтому код мигрирован на актуальный API вместо возврата устаревших классов.
 - **Правило на будущее:** после изменений зависимостей проверять не только успешную сборку, но и фактические package-path внутри production-JAR.
 - **Проверка:** `gradlew.bat clean build` успешен; JAR содержит 0 `org/bstats/**`, 0 `ru/privatenull/pnlibrary/**` и 13 классов vendored Bukkit metrics под `ru/privatenull/pnautomine/libs/pnlibrary/metrics/vendor/bukkit/**`. Запуск на полноценном Paper-сервере с WorldEdit в этой задаче не выполнялся.
-- **Commit или release:** `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`; release не создан.
+- **Commit или release:** исправление `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`; опубликовано в `v1.0.1`.
 
 ## Форматы и совместимость
 
@@ -70,13 +70,21 @@
 
 ## Последние выполненные изменения
 
+### 2026-08-24 — Публикация pnAutoMine 1.0.1
+
+- **Изменено:** версия повышена до 1.0.1, добавлены release notes, создан GitHub Release и загружен production-JAR.
+- **Причина:** существующий `v1.0.0` уже содержал старый JAR; подмена asset без повышения версии не позволила бы автообновлению обнаружить исправление.
+- **Результат:** `pnAutoMine-1.0.1.jar` доступен в GitHub Release `v1.0.1`.
+- **Проверено:** release не draft и не prerelease; asset имеет размер 24 213 743 байта и SHA-256 `79dfbc8b68edbc61f5d171086752fa4753a72d43e490e8f97cf375c8ad924dd5`, совпадающий с локальной сборкой.
+- **Commit/release:** release commit `eb4ce5d5a174ed5f155d94298ddd1b2119f367f1`; `v1.0.1`.
+
 ### 2026-08-24 — Исправление bStats и scoreboard через TAB
 
 - **Изменено:** метрики и обновления мигрированы на `PluginRuntime`; удалён прямой bStats; исправлен composite-build путь; добавлены current/static placeholders, TAB softdepend, README и сохраняемый пример scoreboard.
 - **Причина:** плагин не включался из-за bStats relocation-check; владелец сервера запросил настраиваемый sidebar через TAB.
 - **Результат:** production-JAR успешно собирается, не содержит нерелоцированных bStats/pnLibrary и включает пример TAB.
 - **Проверено:** `gradlew.bat clean build` — `BUILD SUCCESSFUL` (Gradle 8.8, JDK 21.0.11, Windows 11); `git diff --check` без ошибок; структура JAR проверена через `System.IO.Compression`.
-- **Commit/release:** `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`; release не создан.
+- **Commit/release:** `fab9973cb6f6eee68c76c9a4b44aebebdabac2c4`; опубликовано в `v1.0.1`.
 
 ## Незавершённая работа
 
