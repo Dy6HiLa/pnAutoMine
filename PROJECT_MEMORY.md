@@ -7,8 +7,8 @@
 - Поддерживаемые версии: Paper; компиляция против Paper API 1.21.11, исходная ошибка получена на Paper 1.21.4
 - Версия Java: байткод Java 17; проверочная сборка выполнена JDK 21.0.11
 - Основные зависимости: WorldEdit и pnLibrary; опционально FancyHolograms, DecentHolograms, PlaceholderAPI и TAB
-- Последний стабильный commit: `eb4ce5d5a174ed5f155d94298ddd1b2119f367f1`
-- Последний опубликованный release: `v1.0.1` — https://github.com/Dy6HiLa/pnAutoMine/releases/tag/v1.0.1
+- Последний стабильный commit: `a6f0a5608a756eab9856e4db664bdf433929ee18`
+- Последний опубликованный release: `v1.0.2` — https://github.com/Dy6HiLa/pnAutoMine/releases/tag/v1.0.2
 
 ## Постоянные архитектурные правила
 
@@ -93,7 +93,7 @@
 - **Причина:** вывести данные шахты и добычи в TAB без отдельного плагина статистики.
 - **Результат:** версия 1.0.2 собирается; счётчики очищаются вместе с шахтой и поддерживают настраиваемые группы либо точные Material.
 - **Проверено:** `gradlew.bat clean test build` — успешно; 2 теста, 0 failures/errors; JAR версии 1.0.2 содержит новый конфиг/пример, 0 `org/bstats/**` и 0 нерелоцированных `ru/privatenull/pnlibrary/**`; SHA-256 `fab2590bd72c94cf06fbee8551d37eb981c7f0c12c348ece5d3264c931d89184`.
-- **Commit/release:** ещё не созданы.
+- **Commit/release:** `a6f0a5608a756eab9856e4db664bdf433929ee18`; `v1.0.2`.
 
 ### 2026-08-24 — Публикация pnAutoMine 1.0.1
 
