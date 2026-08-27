@@ -3,7 +3,7 @@
 ## Состояние проекта
 
 - Название: pnAutoMine
-- Текущая версия: 1.0.1
+- Текущая версия: 1.0.2
 - Поддерживаемые версии: Paper; компиляция против Paper API 1.21.11, исходная ошибка получена на Paper 1.21.4
 - Версия Java: байткод Java 17; проверочная сборка выполнена JDK 21.0.11
 - Основные зависимости: WorldEdit и pnLibrary; опционально FancyHolograms, DecentHolograms, PlaceholderAPI и TAB
@@ -17,6 +17,8 @@
 - В production-JAR не должно быть классов `org/bstats/**` или `ru/privatenull/pnlibrary/**`; pnLibrary должна быть relocated в `ru/privatenull/pnautomine/libs/pnlibrary`.
 - Composite build подключает pnLibrary из `../../Plugins/pnLibrary`; каталога `../pnLibrary` в текущей структуре workspace нет.
 - Sidebar шахты настраивает сам администратор в TAB. pnAutoMine не управляет scoreboard через TAB API, а предоставляет значения через PlaceholderAPI.
+- Статистика добычи хранится в памяти отдельно для шахты и UUID игрока только в пределах текущего цикла шахты. Она очищается при reset, reload и перезапуске и не является долговременной статистикой игрока.
+- Группы материалов и `value-per-block` задаются в `mining-statistics.groups`; один материал не следует включать в несколько групп с разной ценой.
 
 ## Принятые решения
 
@@ -44,6 +46,18 @@
 - **Совместимость:** без PlaceholderAPI placeholders не регистрируются; без TAB сама логика шахт продолжает работать.
 - **Как проверить:** в игре выполнить `/tab parse <игрок> %pnautomine_current_name%` и зайти в регион шахты.
 
+### Статистика добычи для TAB
+
+- **Статус:** АКТУАЛЬНО
+- **Дата:** 2026-08-28
+- **Компонент:** BlockBreakListener / Mine / PlaceholderAPI
+- **Контекст:** scoreboard должен показывать количество добытых игроком ресурсов и расчётную зарплату без отдельного плагина статистики.
+- **Принятое решение:** на `MONITOR` учитываются только неотменённые `BlockBreakEvent` внутри региона; сохраняются общий счёт шахты, счёт по `Material` и счёт по UUID игрока. Placeholder может обращаться к группе из конфига либо к точному Bukkit Material.
+- **Почему выбран этот подход:** счётчик отражает фактически разрешённые ломания в шахте, не зависит от содержимого инвентаря и не требует базы данных для краткоживущего scoreboard текущего reset-цикла.
+- **Не использовать:** подсчёт отменённых событий, сканирование инвентаря как замену статистике или долговременное накопление этих счётчиков без отдельного запроса на формат хранения и миграцию.
+- **Совместимость:** существующий `%pnautomine_*_blocks_mined%` остаётся общим счётчиком шахты. Новые player-placeholders требуют контекст игрока; вне текущей шахты current-placeholders возвращают пустую строку.
+- **Как проверить:** сломать блоки двух материалов двумя игроками, проверить player/global placeholders, выполнить reset и убедиться, что все значения стали нулевыми.
+
 ## Известные проблемы и исправления
 
 ### bStats Metrics class has not been relocated correctly
@@ -64,11 +78,22 @@
 - Существующий формат `%pnautomine_<mine_id>_<value>%` сохранён. Поддерживаются `id`, `name`, `type`, `type_display`, `blocks_total`, `blocks_remaining`, `blocks_mined`, `percentage`, `percentage_mined`, `reset_time`, `reset_seconds`, `reset_interval`, `world`.
 - Добавлены player-aware placeholders `%pnautomine_current_<value>%`; шахта определяется по текущей позиции игрока. `%pnautomine_current_exists%` возвращает `true` или `false`, остальные current-placeholders вне шахты возвращают пустую строку.
 - Добавлен `%pnautomine_mine_count%`.
+- Добавлены `%pnautomine_next_mine_<value>%` для ближайшей по времени сброса шахты и `<mine>_next_type` / `<mine>_next_type_display` для следующего типа прогрессии.
+- Добавлены `<mine>_player_mined_total`, `<mine>_player_mined_<group-or-material>`, `<mine>_player_earnings` (алиас `player_salary`), а также общие `<mine>_mined_<group-or-material>` и `<mine>_blocks_mined_<group-or-material>`. Префикс `<mine>` может быть `current` или ID шахты.
+- `player_earnings` суммирует добытые блоки по `value-per-block`; число знаков задаёт `mining-statistics.salary-decimals` от 0 до 4.
 - Проценты форматируются с точкой независимо от системной Locale. При пересекающихся ID выбирается самое длинное совпадение.
 - Форматы `config.yml`, файлов шахт и команд не изменены.
 - Публичный Java-метод `getUpdateChecker()` теперь возвращает `PluginUpdateService`, потому что старого типа `UpdateChecker` в актуальной pnLibrary нет.
 
 ## Последние выполненные изменения
+
+### 2026-08-28 — Следующая шахта и статистика добычи
+
+- **Изменено:** добавлены placeholders ближайшего reset, следующего типа, персональной и общей добычи по материалам, расчётной зарплаты; добавлен конфиг групп и новый TAB-пример в стиле предоставленного scoreboard.
+- **Причина:** вывести данные шахты и добычи в TAB без отдельного плагина статистики.
+- **Результат:** версия 1.0.2 собирается; счётчики очищаются вместе с шахтой и поддерживают настраиваемые группы либо точные Material.
+- **Проверено:** `gradlew.bat clean test build` — успешно; 2 теста, 0 failures/errors; JAR версии 1.0.2 содержит новый конфиг/пример, 0 `org/bstats/**` и 0 нерелоцированных `ru/privatenull/pnlibrary/**`; SHA-256 `fab2590bd72c94cf06fbee8551d37eb981c7f0c12c348ece5d3264c931d89184`.
+- **Commit/release:** ещё не созданы.
 
 ### 2026-08-24 — Публикация pnAutoMine 1.0.1
 

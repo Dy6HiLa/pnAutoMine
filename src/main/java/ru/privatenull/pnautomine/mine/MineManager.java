@@ -198,7 +198,7 @@ public final class MineManager {
             block.setType(type.randomBlock(), false);
         }
 
-        mine.setMinedBlocks(0);
+        mine.resetMiningStats();
         mine.setLastResetTime(System.currentTimeMillis());
 
         // Broadcast reset message
@@ -303,42 +303,44 @@ public final class MineManager {
             return null;
         }
 
-        if (!plugin.getConfig().getBoolean("mine-type-progression.enabled", true)) {
-            return currentType;
-        }
+        MineType nextType = getNextType(mine);
+        if (nextType == null) return currentType;
+
+        mine.setTypeName(nextType.getId());
+        mine.setDisplayName(nextType.getDisplayName());
+        saveMine(mine);
+        return nextType;
+    }
+
+    /** Returns the type that will be selected on the next reset without changing the mine. */
+    public MineType getNextType(Mine mine) {
+        if (!plugin.getConfig().getBoolean("mine-type-progression.enabled", true)) return null;
+
+        MineType currentType = plugin.getMineTypes().getType(mine.getTypeName());
+        if (currentType == null) return null;
 
         List<String> typeIds = new ArrayList<>(plugin.getMineTypes().getTypeIds());
-        if (typeIds.size() < 2) {
-            return currentType;
-        }
+        if (typeIds.size() < 2) return null;
 
         int currentIndex = typeIds.indexOf(mine.getTypeName());
-        if (currentIndex < 0) {
-            return currentType;
-        }
+        if (currentIndex < 0) return null;
 
         int nextIndex = currentIndex + 1;
         if (nextIndex >= typeIds.size()) {
-            if (!plugin.getConfig().getBoolean("mine-type-progression.loop", true)) {
-                return currentType;
-            }
+            if (!plugin.getConfig().getBoolean("mine-type-progression.loop", true)) return null;
             nextIndex = 0;
         }
 
         String nextTypeId = typeIds.get(nextIndex);
-        if (nextTypeId.equals(mine.getTypeName())) {
-            return currentType;
-        }
+        return nextTypeId.equals(mine.getTypeName()) ? null : plugin.getMineTypes().getType(nextTypeId);
+    }
 
-        MineType nextType = plugin.getMineTypes().getType(nextTypeId);
-        if (nextType == null) {
-            return currentType;
-        }
-
-        mine.setTypeName(nextTypeId);
-        mine.setDisplayName(nextType.getDisplayName());
-        saveMine(mine);
-        return nextType;
+    /** Returns the enabled mine whose scheduled reset is closest. */
+    public Mine getNextMineToReset() {
+        return mines.values().stream()
+                .filter(mine -> mine.getResetInterval() > 0)
+                .min(Comparator.comparingLong(Mine::getNextResetTime))
+                .orElse(null);
     }
 
     public Mine getMine(String id) {

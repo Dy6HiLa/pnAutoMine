@@ -75,6 +75,38 @@ mine-type-progression:
   enabled: true
   loop: true
 
+# Группы блоков для PlaceholderAPI-статистики добычи.
+# Считаются только неотменённые BlockBreakEvent внутри шахты.
+# Счётчики относятся к текущему циклу и очищаются при сбросе шахты или перезапуске плагина.
+mining-statistics:
+  # Количество знаков после точки в %pnautomine_current_player_earnings%.
+  salary-decimals: 0
+  groups:
+    iron:
+      materials: [IRON_ORE, DEEPSLATE_IRON_ORE]
+      value-per-block: 0.0
+    lapis:
+      materials: [LAPIS_ORE, DEEPSLATE_LAPIS_ORE]
+      value-per-block: 0.0
+    emerald:
+      materials: [EMERALD_ORE, DEEPSLATE_EMERALD_ORE]
+      value-per-block: 0.0
+    diamond:
+      materials: [DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE]
+      value-per-block: 0.0
+    gold:
+      materials: [GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE]
+      value-per-block: 0.0
+    coal:
+      materials: [COAL_ORE, DEEPSLATE_COAL_ORE]
+      value-per-block: 0.0
+    stone:
+      materials: [STONE, COBBLESTONE, ANDESITE, DIORITE, GRANITE, DEEPSLATE]
+      value-per-block: 0.0
+    redstone:
+      materials: [REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE]
+      value-per-block: 0.0
+
 # Настройки голограммы для отображения информации о шахте
 hologram:
   enabled: true

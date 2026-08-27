@@ -3,6 +3,13 @@ package ru.privatenull.pnautomine.mine;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.Material;
+
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Represents a configured auto-mine with its region, type, and runtime state.
@@ -23,8 +30,10 @@ public final class Mine {
 
     // Runtime state
     private int totalBlocks;
-    private int minedBlocks;
-    private long lastResetTime;
+    private volatile int minedBlocks;
+    private volatile long lastResetTime;
+    private final Map<Material, Integer> minedBlocksByMaterial = new EnumMap<>(Material.class);
+    private final Map<UUID, Map<Material, Integer>> playerMinedBlocks = new HashMap<>();
 
     public Mine(String id) {
         this.id = id;
@@ -134,8 +143,37 @@ public final class Mine {
         this.minedBlocks = minedBlocks;
     }
 
-    public void incrementMinedBlocks() {
+    public synchronized void recordMinedBlock(UUID playerId, Material material) {
         this.minedBlocks++;
+        minedBlocksByMaterial.merge(material, 1, Integer::sum);
+        playerMinedBlocks.computeIfAbsent(playerId, ignored -> new EnumMap<>(Material.class))
+                .merge(material, 1, Integer::sum);
+    }
+
+    public synchronized int getMinedBlocks(Collection<Material> materials) {
+        return materials.stream().mapToInt(material -> minedBlocksByMaterial.getOrDefault(material, 0)).sum();
+    }
+
+    public synchronized int getPlayerMinedBlocks(UUID playerId) {
+        Map<Material, Integer> stats = playerMinedBlocks.get(playerId);
+        return stats == null ? 0 : stats.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public synchronized int getPlayerMinedBlocks(UUID playerId, Collection<Material> materials) {
+        Map<Material, Integer> stats = playerMinedBlocks.get(playerId);
+        if (stats == null) return 0;
+        return materials.stream().mapToInt(material -> stats.getOrDefault(material, 0)).sum();
+    }
+
+    public synchronized Map<Material, Integer> getPlayerMinedBlocksSnapshot(UUID playerId) {
+        Map<Material, Integer> stats = playerMinedBlocks.get(playerId);
+        return stats == null ? Map.of() : Map.copyOf(stats);
+    }
+
+    public synchronized void resetMiningStats() {
+        minedBlocks = 0;
+        minedBlocksByMaterial.clear();
+        playerMinedBlocks.clear();
     }
 
     public int getRemainingBlocks() {

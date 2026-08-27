@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'ru.privatenull'
-version = '1.0.1'
+version = '1.0.2'
 
 repositories {
     mavenCentral()
@@ -45,6 +45,9 @@ dependencies {
     implementation("ru.privatenull:pnLibrary:1.0.0")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
+    testImplementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks {
@@ -84,6 +87,10 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
 }
 
 configurations.configureEach {

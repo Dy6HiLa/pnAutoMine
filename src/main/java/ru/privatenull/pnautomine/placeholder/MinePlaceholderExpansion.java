@@ -1,6 +1,7 @@
 package ru.privatenull.pnautomine.placeholder;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +10,7 @@ import ru.privatenull.pnautomine.mine.Mine;
 import ru.privatenull.pnautomine.mine.MineType;
 import ru.privatenull.pnlibrary.text.ColorUtil;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Locale;
 
@@ -29,6 +31,9 @@ import java.util.Locale;
  *   %pnautomine_<mine_id>_reset_interval% - Reset interval in seconds
  *   %pnautomine_current_<value>%           - Value for the mine containing the player
  *   %pnautomine_current_exists%            - Whether the player is inside a mine
+ *   %pnautomine_current_next_type%         - Type selected on the next reset
+ *   %pnautomine_current_player_mined_<id>% - Player blocks mined in this reset cycle
+ *   %pnautomine_next_mine_<value>%         - Mine whose reset is scheduled next
  *   %pnautomine_mine_count%                - Number of loaded mines
  */
 public final class MinePlaceholderExpansion extends PlaceholderExpansion {
@@ -65,13 +70,20 @@ public final class MinePlaceholderExpansion extends PlaceholderExpansion {
             return String.valueOf(plugin.getMineManager().getAllMines().size());
         }
 
+        if (params.regionMatches(true, 0, "next_mine_", 0, "next_mine_".length())) {
+            Mine nextMine = plugin.getMineManager().getNextMineToReset();
+            if (nextMine == null) return "";
+            String placeholder = params.substring("next_mine_".length()).toLowerCase(Locale.ROOT);
+            return resolvePlaceholder(nextMine, player, placeholder);
+        }
+
         if (params.regionMatches(true, 0, "current_", 0, "current_".length())) {
             String placeholder = params.substring("current_".length()).toLowerCase(Locale.ROOT);
             Mine currentMine = player == null ? null : plugin.getMineManager().getMineAt(player.getLocation());
             if (placeholder.equals("exists")) {
                 return String.valueOf(currentMine != null);
             }
-            return currentMine == null ? "" : resolvePlaceholder(currentMine, placeholder);
+            return currentMine == null ? "" : resolvePlaceholder(currentMine, player, placeholder);
         }
 
         // Mine IDs may contain underscores and one ID may prefix another.
@@ -83,17 +95,25 @@ public final class MinePlaceholderExpansion extends PlaceholderExpansion {
         if (mine == null) return null;
 
         String placeholder = params.substring(mine.getId().length() + 1).toLowerCase(Locale.ROOT);
-        return resolvePlaceholder(mine, placeholder);
+        return resolvePlaceholder(mine, player, placeholder);
     }
 
-    private String resolvePlaceholder(Mine mine, String placeholder) {
-        return switch (placeholder) {
+    private String resolvePlaceholder(Mine mine, Player player, String placeholder) {
+        String exactValue = switch (placeholder) {
             case "id" -> mine.getId();
             case "name" -> mine.getDisplayName() != null ? ColorUtil.colorize(mine.getDisplayName()) : mine.getId();
             case "type" -> mine.getTypeName();
             case "type_display" -> {
                 MineType type = plugin.getMineTypes().getType(mine.getTypeName());
                 yield type != null ? ColorUtil.colorize(type.getDisplayName()) : mine.getTypeName();
+            }
+            case "next_type" -> {
+                MineType type = plugin.getMineManager().getNextType(mine);
+                yield type == null ? "" : type.getId();
+            }
+            case "next_type_display" -> {
+                MineType type = plugin.getMineManager().getNextType(mine);
+                yield type == null ? "" : ColorUtil.colorize(type.getDisplayName());
             }
             case "blocks_total" -> String.valueOf(mine.getTotalBlocks());
             case "blocks_remaining" -> String.valueOf(mine.getRemainingBlocks());
@@ -106,5 +126,38 @@ public final class MinePlaceholderExpansion extends PlaceholderExpansion {
             case "world" -> mine.getWorldName();
             default -> null;
         };
+        if (exactValue != null) return exactValue;
+
+        if (placeholder.equals("player_earnings") || placeholder.equals("player_salary")) {
+            if (player == null) return "0";
+            double earnings = plugin.getMiningStats().calculateEarnings(
+                    mine.getPlayerMinedBlocksSnapshot(player.getUniqueId()));
+            return plugin.getMiningStats().formatEarnings(earnings);
+        }
+
+        if (placeholder.startsWith("player_mined_")) {
+            if (player == null) return "0";
+            String groupOrMaterial = placeholder.substring("player_mined_".length());
+            if (groupOrMaterial.equals("total")) {
+                return String.valueOf(mine.getPlayerMinedBlocks(player.getUniqueId()));
+            }
+            Collection<Material> materials = plugin.getMiningStats()
+                    .resolveMaterials(groupOrMaterial);
+            return String.valueOf(mine.getPlayerMinedBlocks(player.getUniqueId(), materials));
+        }
+
+        String groupOrMaterial = null;
+        if (placeholder.startsWith("blocks_mined_")) {
+            groupOrMaterial = placeholder.substring("blocks_mined_".length());
+        } else if (placeholder.startsWith("mined_")) {
+            groupOrMaterial = placeholder.substring("mined_".length());
+        }
+        if (groupOrMaterial != null) {
+            if (groupOrMaterial.equals("total")) return String.valueOf(mine.getMinedBlocks());
+            return String.valueOf(mine.getMinedBlocks(
+                    plugin.getMiningStats().resolveMaterials(groupOrMaterial)));
+        }
+
+        return null;
     }
 }

@@ -68,6 +68,8 @@ Placeholder текущей шахты определяется по позици
 - `%pnautomine_current_name%` — отображаемое имя
 - `%pnautomine_current_type%` — ID типа
 - `%pnautomine_current_type_display%` — отображаемое имя типа
+- `%pnautomine_current_next_type%` — ID типа после следующего сброса
+- `%pnautomine_current_next_type_display%` — отображаемое имя следующего типа
 - `%pnautomine_current_blocks_total%` — всего блоков
 - `%pnautomine_current_blocks_remaining%` — осталось блоков
 - `%pnautomine_current_blocks_mined%` — добыто блоков
@@ -78,6 +80,28 @@ Placeholder текущей шахты определяется по позици
 - `%pnautomine_current_reset_interval%` — интервал сброса в секундах
 - `%pnautomine_current_world%` — мир шахты
 - `%pnautomine_mine_count%` — число загруженных шахт
+
+Следующая шахта по времени автоматического сброса:
+
+- `%pnautomine_next_mine_id%`
+- `%pnautomine_next_mine_name%`
+- `%pnautomine_next_mine_type_display%`
+- `%pnautomine_next_mine_reset_time%`
+- `%pnautomine_next_mine_reset_seconds%`
+
+Персональная добыча игрока в текущем цикле шахты:
+
+- `%pnautomine_current_player_mined_total%` — всего сломано блоков
+- `%pnautomine_current_player_mined_<group>%` — количество по группе из `mining-statistics.groups`
+- `%pnautomine_current_player_mined_<material>%` — количество конкретного Bukkit Material
+- `%pnautomine_current_player_earnings%` — сумма по `value-per-block`
+
+Например: `%pnautomine_current_player_mined_iron%` и
+`%pnautomine_current_player_mined_diamond_ore%`. Для общей добычи всех игроков
+используются `%pnautomine_current_mined_<group>%` и
+`%pnautomine_current_blocks_mined_<group>%`. Статистика очищается при сбросе
+шахты и при перезапуске/reload плагина. Готовый scoreboard в стиле счётчика
+добычи создаётся в `plugins/pnAutoMine/tab-mining-scoreboard-example.yml`.
 
 Для конкретной шахты вместо `current` указывается её ID:
 `%pnautomine_<mine_id>_<value>%`, например
@@ -93,6 +117,7 @@ Placeholder текущей шахты определяется по позици
 - `defaults` - интервалы и поведение сброса
 - `mine-types` - типы шахт и состав блоков
 - `mine-type-progression` - порядок автоматической смены типов
+- `mining-statistics` - группы материалов, цена за блок и формат зарплаты
 - `hologram` - текст и позиция голограммы
 
 ## Установка

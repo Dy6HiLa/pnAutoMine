@@ -1,0 +1,27 @@
+# Пример scoreboard статистики добычи для plugins/TAB/config.yml.
+# Требуются TAB и PlaceholderAPI. Цены задаются в config.yml pnAutoMine:
+# mining-statistics.groups.<группа>.value-per-block
+scoreboard:
+  enabled: true
+  toggle-command: /sb
+  remember-toggle-choice: false
+  hidden-by-default: false
+  delay-on-join-milliseconds: 0
+  scoreboards:
+    pnautomine-mining:
+      display-condition: "%pnautomine_current_exists%=true"
+      title: "&6&lДОБЫЧА"
+      lines:
+        - "&fЖелезо:||&6%pnautomine_current_player_mined_iron% шт."
+        - "&fЛазурит:||&6%pnautomine_current_player_mined_lapis% шт."
+        - "&fИзумруды:||&6%pnautomine_current_player_mined_emerald% шт."
+        - "&fАлмазы:||&6%pnautomine_current_player_mined_diamond% шт."
+        - "&fЗолото:||&6%pnautomine_current_player_mined_gold% шт."
+        - "&fУголь:||&6%pnautomine_current_player_mined_coal% шт."
+        - "&fКамень:||&6%pnautomine_current_player_mined_stone% шт."
+        - "&fРедстоун:||&6%pnautomine_current_player_mined_redstone% шт."
+        - ""
+        - "&fВсего:||&6%pnautomine_current_player_mined_total% шт."
+        - "&fЗарплата:||&6%pnautomine_current_player_earnings%"
+        - "&7Следующий тип:||%pnautomine_current_next_type_display%"
+        - "&7Следующий сброс:||%pnautomine_next_mine_name%"

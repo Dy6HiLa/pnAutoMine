@@ -5,6 +5,7 @@ import ru.privatenull.pnautomine.commands.MineCommand;
 import ru.privatenull.pnautomine.commands.MineTabCompleter;
 import ru.privatenull.pnautomine.config.MessagesConfig;
 import ru.privatenull.pnautomine.config.MineTypesConfig;
+import ru.privatenull.pnautomine.config.MiningStatsConfig;
 import ru.privatenull.pnautomine.hologram.HologramService;
 import ru.privatenull.pnautomine.listeners.BlockBreakListener;
 import ru.privatenull.pnautomine.mine.MineManager;
@@ -24,6 +25,7 @@ public final class PnAutoMinePlugin extends JavaPlugin {
 
     private MessagesConfig messages;
     private MineTypesConfig mineTypes;
+    private MiningStatsConfig miningStats;
     private MineManager mineManager;
     private HologramService holograms;
     private PluginRuntime runtime;
@@ -34,9 +36,13 @@ public final class PnAutoMinePlugin extends JavaPlugin {
         if (!new File(getDataFolder(), "tab-scoreboard-example.yml").isFile()) {
             saveResource("tab-scoreboard-example.yml", false);
         }
+        if (!new File(getDataFolder(), "tab-mining-scoreboard-example.yml").isFile()) {
+            saveResource("tab-mining-scoreboard-example.yml", false);
+        }
 
         messages = new MessagesConfig(this);
         mineTypes = new MineTypesConfig(this);
+        miningStats = new MiningStatsConfig(this);
         holograms = new HologramService(this);
 
         mineManager = new MineManager(this);
@@ -78,6 +84,7 @@ public final class PnAutoMinePlugin extends JavaPlugin {
         reloadConfig();
         messages.load();
         mineTypes.reload();
+        miningStats.reload();
 
         if (mineManager != null) {
             mineManager.shutdown();
@@ -102,6 +109,10 @@ public final class PnAutoMinePlugin extends JavaPlugin {
 
     public MineTypesConfig getMineTypes() {
         return mineTypes;
+    }
+
+    public MiningStatsConfig getMiningStats() {
+        return miningStats;
     }
 
     public MineManager getMineManager() {

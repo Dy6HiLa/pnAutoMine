@@ -13,6 +13,7 @@ scoreboard:
       lines:
         - "&7Шахта:||%pnautomine_current_name%"
         - "&7Тип:||%pnautomine_current_type_display%"
+        - "&7Следующий тип:||%pnautomine_current_next_type_display%"
         - "&7Осталось:||%pnautomine_current_blocks_remaining%/%pnautomine_current_blocks_total%"
         - "&7Добыто:||%pnautomine_current_percentage_mined%%"
         - "&7Сброс:||%pnautomine_current_reset_time%"
@@ -20,3 +21,4 @@ scoreboard:
 # Для scoreboard конкретной шахты замените <id> на её ID, например:
 #   %pnautomine_spawn_blocks_remaining%
 # Полный список placeholders находится в README.md.
+# Пример статистики по материалам: tab-mining-scoreboard-example.yml.

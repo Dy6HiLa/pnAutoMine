@@ -22,7 +22,7 @@ public final class BlockBreakListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Mine mine = plugin.getMineManager().getMineAt(event.getBlock().getLocation());
         if (mine != null) {
-            mine.incrementMinedBlocks();
+            mine.recordMinedBlock(event.getPlayer().getUniqueId(), event.getBlock().getType());
         }
     }
 }
